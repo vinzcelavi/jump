@@ -1,6 +1,12 @@
 import type { FieldError, UseFormRegister } from "react-hook-form";
 import { type ZodType, z } from "zod";
 
+export const FORM_FIELDS = {
+  TITLE: 'title',
+  EMAIL: 'email',
+  DESCRIPTION: 'description',
+} as const;
+
 export type Pokemon = {
   name: string;
   image: string;
@@ -8,9 +14,9 @@ export type Pokemon = {
 };
 
 export type FormData = {
-  title: string;
-  email: string;
-  description: string;
+  [FORM_FIELDS.TITLE]: string;
+  [FORM_FIELDS.EMAIL]: string;
+  [FORM_FIELDS.DESCRIPTION]: string;
 };
 
 export type FormFieldProps = {
@@ -21,15 +27,11 @@ export type FormFieldProps = {
   error: FieldError | undefined;
 };
 
-export type ValidFieldNames =
-  | "title"
-  | "email"
-  | "description";
+export type ValidFieldNames = typeof FORM_FIELDS[keyof typeof FORM_FIELDS];
 
-
- export const UserSchema: ZodType<FormData> = z
+export const UserSchema: ZodType<FormData> = z
   .object({
-    title: z.string().min(1, { message: "Title is required" }),
-    email: z.string().email({ message: "Invalid email address" }),
-    description: z.string().min(1, { message: "Description is required" }),
+    [FORM_FIELDS.TITLE]: z.string().min(1, { message: "Title is required" }),
+    [FORM_FIELDS.EMAIL]: z.string().email({ message: "Invalid email address" }),
+    [FORM_FIELDS.DESCRIPTION]: z.string().min(1, { message: "Description is required" }),
   });
